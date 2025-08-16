@@ -35,3 +35,12 @@ class Course(models.Model):
         # self.image.image(**image_options) would return a html image tag containing the image url
         # self.image.build_url and self.image.image are part of the cloudinary package
         return url
+
+class Lesson(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    title = models.CharField(max_length=144)
+    description = models.TextField(null=True, blank=True)
+    thumbnail = CloudinaryField("image", null=True, blank=True)
+    video = CloudinaryField("video", null=True, blank=True, resource_type="video")
+    can_preview = models.BooleanField(default=False, help_text="If the user does not have access to the course, can they preview this lesson?")
+    status = models.CharField(max_length=7, choices=StatusTypes.choices, default=StatusTypes.PUBLISHED)
