@@ -1,2 +1,4 @@
 django
-pillow
+pillow # for image processing
+cloudinary
+python-decouple
