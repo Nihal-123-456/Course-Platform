@@ -1,3 +1,4 @@
-from ._cloudinary import cloudinary_init
+from ._cloudinary import cloudinary_init, cloudinary_image_processing, generate_slug_id, get_display_name, get_public_id_prefix, cloudinary_video_processing
 
-__all__ = ["cloudinary_init"] # so that we can use the cloudinary_init function directly with helpers.cloudinary_init()
+# so that we can use the functions directly; example: helpers.cloudinary_init()
+__all__ = ["cloudinary_init", "cloudinary_image_processing", "generate_slug_id", "get_display_name", "get_public_id_prefix", "cloudinary_video_processing"] 

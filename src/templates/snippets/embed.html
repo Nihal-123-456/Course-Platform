@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.0.2/dist/cld-video-player.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.0.2/dist/cld-video-player.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<!-- using data keyword for including elements in the dataset so that they can be received through js -->
+<video class="videoplayer" controls autoplay class="cld-video-player" data-cloud-name="{{cloud_name}}" data-url="{{url}}">
+</video>
+
+<script>
+    function renderVideo(videoElement) {
+        //setting a unique id to each video
+        video_id = "video" + Math.random().toString(36)
+        videoElement.setAttribute('id', video_id) 
+        // accessing the cloud name and url from dataset
+        const videoCloud = videoElement.dataset.cloudName
+        const videoUrl = videoElement.dataset.url
+        // creating an instance of the cloudinary videoplayer by passing on the video element id and other attributes
+        const cld = cloudinary.videoPlayer(video_id,{ cloudName: videoCloud, });
+        cld.source(videoUrl) //running the video using the url
+    }
+
+    function getAllVideos() {
+        const videoElements = document.getElementsByClassName('videoplayer')
+        for(let el of videoElements) {
+            renderVideo(el)
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', getAllVideos)
+</script>
