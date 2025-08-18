@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Course,Lesson
-from helpers import cloudinary_image_processing, cloudinary_video_processing
+import helpers
 # Register your models here.
 
 # to create stacked lesson model instances for adding them within the course model

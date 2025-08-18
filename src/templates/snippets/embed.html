@@ -2,19 +2,19 @@
 <script src="https://cdn.jsdelivr.net/npm/cloudinary-video-player@3.0.2/dist/cld-video-player.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <!-- using data keyword for including elements in the dataset so that they can be received through js -->
-<video class="videoplayer" controls autoplay class="cld-video-player" data-cloud-name="{{cloud_name}}" data-url="{{url}}">
+<video class="videoplayer" controls autoplay data-cloud-name="{{cloud_name}}" data-url="{{video_url}}" data-cld-colors='{ "base": "#0071ba", "accent": "#db8226", "text": "#fff" }' class="cld-video-player cld-video-player-skin-light">
 </video>
 
 <script>
     function renderVideo(videoElement) {
-        //setting a unique id to each video
-        video_id = "video" + Math.random().toString(36)
+        //setting a unique id to each video. here, Math.random() generates a random float number between 0 and 1 (0.123345) which is then turned into a base-36 string (alphaneumeric characters 0.f3h3j5l5). we then convert that by excluding the 0 and (.) by taking the characters starting from index 2 or the third character.
+        video_id = "video" + Math.random().toString(36).substr(2, 9)
         videoElement.setAttribute('id', video_id) 
         // accessing the cloud name and url from dataset
         const videoCloud = videoElement.dataset.cloudName
         const videoUrl = videoElement.dataset.url
         // creating an instance of the cloudinary videoplayer by passing on the video element id and other attributes
-        const cld = cloudinary.videoPlayer(video_id,{ cloudName: videoCloud, });
+        const cld = cloudinary.videoPlayer(video_id,{ cloudName: videoCloud });
         cld.source(videoUrl) //running the video using the url
     }
 

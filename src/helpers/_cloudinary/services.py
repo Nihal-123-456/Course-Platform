@@ -1,4 +1,6 @@
 from django.utils.text import slugify
+from django.template.loader import get_template
+from django.conf import settings
 import uuid
 
 def cloudinary_image_processing(instance, field_name='image', width=200):
@@ -14,25 +16,34 @@ def cloudinary_image_processing(instance, field_name='image', width=200):
     url = image_obj.build_url(**image_options)
     return url
 
-def cloudinary_video_processing(instance, field_name='video', width=None, height=None, sign_url=True):
+def cloudinary_video_processing(instance, field_name='video', as_html=True, width=None, height=None, sign_url=True):
     video_obj = getattr(instance, field_name) 
     if not video_obj:
         return None
     video_options = {
-        'sign_url': sign_url, # for private video sign_url needs to true
+        #sign_url needs to be true for private videos
+        "sign_url": sign_url,
     }
-    if height:
-        video_options['height'] = height
-    if width:
-        video_options['width'] = width
+    if width is not None:
+        video_options['width']=width
+    if height is not None:
+        video_options['height']=height
+
     url = video_obj.build_url(**video_options)
-    # getting the html template and then redering it by passing the required arguments
+    if as_html:
+        # getting the html template and then redering it by passing the required arguments
+        template = get_template('snippets/embed.html')
+        html = template.render({'video_url': url, 'cloud_name':settings.CLOUDINARY_CLOUD_NAME})
+        return html
     return url
 
 # public_id_prefix, display_name, tags are all optional parameters in cloudinary
 def get_public_id_prefix(instance, *args, **kwargs):
-    if instance.path is not None:
-        return instance.path
+    path = instance.path
+    if path is not None:
+        if path.startswith('/'):
+            path = path[1:]
+        return path
     model_class = instance.__class__ # for getting the model class
     model_name = model_class.__name__ # for getting the model name
     model_name_slug = slugify(model_name)

@@ -1,0 +1,8 @@
+<ul>
+    {% for obj in qs %}
+    <li>
+        <a class="text-blue-500 hover:text-blue-700 hover:underline" href="{{obj.path}}">{{obj.title}}</a> 
+        {% if obj.is_coming_soon %}<span>(Coming Soon)</span>{% endif %}
+    </li>
+    {% endfor %}
+</ul>

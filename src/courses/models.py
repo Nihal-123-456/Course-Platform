@@ -16,7 +16,8 @@ class StatusTypes(models.TextChoices):
 
 class Course(models.Model):
     title = models.CharField(max_length=144)
-    slug_id = models.CharField(max_length=160, null=True, blank=True)
+    # we use db_index to speed up the process of lookup through the slug_id
+    slug_id = models.CharField(max_length=160, null=True, blank=True, db_index=True) 
     description = models.TextField(null=True, blank=True)
 
     image = CloudinaryField("image", null=True, blank=True, public_id_prefix=get_public_id_prefix, display_name=get_display_name, tags=['courses', 'timestamp'])
@@ -32,16 +33,19 @@ class Course(models.Model):
     def get_display_name(self):
         return f"{self.title} - course"
     
+    def is_coming_soon(self):
+        return self.status == StatusTypes.COMING_SOON
+    
     @property
     def path(self):
         if self.slug_id:
-            return f"course/{self.slug_id}"
+            return f"/course/{self.slug_id}"
         return None
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=144)
-    slug_id = models.CharField(max_length=160, null=True, blank=True)
+    slug_id = models.CharField(max_length=160, null=True, blank=True, db_index=True)
     description = models.TextField(null=True, blank=True)
 
     image = CloudinaryField("image", null=True, blank=True, public_id_prefix=get_public_id_prefix, display_name=get_display_name, tags=['thumbnail', 'lesson'])
@@ -61,6 +65,14 @@ class Lesson(models.Model):
     
     def get_display_name(self):
         return f"{self.title} - {self.course.get_display_name()}"
+    
+    @property
+    def is_coming_soon(self):
+        return self.status == StatusTypes.COMING_SOON
+    
+    @property
+    def has_video(self):
+        return self.video is not None
  
     @property
     def path(self):

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}Course List{% endblock %}
+{% block body %}
+    <span>{{obj.title}}</span>
+    {% if obj.is_coming_soon %}<span>(Coming Soon)</span>{% endif %}
+    <h1>{{obj.description}}</h1>
+    {% include 'snippets/list.html' %}
+{% endblock %}
