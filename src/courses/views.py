@@ -13,7 +13,8 @@ def course_list_view(request):
 
 def course_detail_view(request, course_id):
     obj = get_course_detail(course_id)
-    qs = obj.lesson_set.filter(status__in=[StatusTypes.PUBLISHED, StatusTypes.COMING_SOON])
+    # we are accessing the lessons of a course through reverse relationship (modelNameInSmallCase_set)
+    qs = obj.lesson_set.filter(status__in=[StatusTypes.PUBLISHED, StatusTypes.COMING_SOON]) 
     context = {
         'obj': obj,
         'qs': qs
